@@ -1,15 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MessageType } from './types/message.type';
+import { CreateMessageDto } from './dto/create-message.dto';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class MessagesService {
-  private messages: MessageType[];
+  private messages: MessageType[] = [];
 
   getAllMessages() {
     return this.messages;
   }
 
-  getOneMessage(id: number): MessageType {
+  getOneMessage(id: string): MessageType {
     const messageFind = this.messages.find((message) => message.id === id);
 
     if (!messageFind) {
@@ -17,5 +23,15 @@ export class MessagesService {
     }
 
     return messageFind;
+  }
+
+  createMessage(data: CreateMessageDto) {
+    const message = { id: randomUUID(), description: data.description };
+
+    if (!data.description) {
+      throw new BadRequestException('Descrição é obrigatoria');
+    }
+
+    this.messages.push(message);
   }
 }
