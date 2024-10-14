@@ -44,4 +44,14 @@ export class MessagesService {
 
     messageFind.description = data.description;
   }
+
+  deleteMessage(id: string) {
+    const messageFind = this.messages.findIndex((message) => message.id === id);
+
+    if (messageFind === -1) {
+      throw new NotFoundException('Mensagem não encontrada');
+    }
+
+    this.messages.splice(messageFind, 1);
+  }
 }
