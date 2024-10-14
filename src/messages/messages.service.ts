@@ -34,4 +34,14 @@ export class MessagesService {
 
     this.messages.push(message);
   }
+
+  updateMessage(id: string, data: CreateMessageDto) {
+    const messageFind = this.messages.find((message) => message.id === id);
+
+    if (!messageFind) {
+      throw new NotFoundException('Mensagem não encontrada');
+    }
+
+    messageFind.description = data.description;
+  }
 }

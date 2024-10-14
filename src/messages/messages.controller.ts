@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 
@@ -18,5 +18,10 @@ export class MessagesController {
   @Post()
   createMessage(@Body() data: CreateMessageDto) {
     this.messagesService.createMessage(data);
+  }
+
+  @Patch(':id')
+  updateMessage(@Param('id') id: string, @Body() data: CreateMessageDto) {
+    this.messagesService.updateMessage(id, data);
   }
 }
