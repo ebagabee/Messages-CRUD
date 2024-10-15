@@ -8,7 +8,6 @@ import {
   Post,
 } from '@nestjs/common';
 import { MessagesService } from './messages.service';
-import { CreateMessageDto } from './dto/create-message.dto';
 
 @Controller('messages')
 export class MessagesController {
@@ -16,25 +15,26 @@ export class MessagesController {
 
   @Get()
   findAll() {
-    return this.messagesService.getAllMessages();
+    return this.messagesService.findAll();
   }
+
   @Get(':id')
-  findOneMessage(@Param('id') id: string) {
-    return this.messagesService.getOneMessage(id);
+  findOne(@Param('id') id: string) {
+    return this.messagesService.findOne(id);
   }
 
   @Post()
-  createMessage(@Body() data: CreateMessageDto) {
-    this.messagesService.createMessage(data);
+  create(@Body() data: any) {
+    return this.messagesService.create(data);
   }
 
   @Patch(':id')
-  updateMessage(@Param('id') id: string, @Body() data: CreateMessageDto) {
-    this.messagesService.updateMessage(id, data);
+  update(@Param('id') id: string, @Body() body: any) {
+    this.messagesService.update(id, body);
   }
 
-  @Delete(':id')
-  deleteMessage(@Param('id') id: string) {
-    this.messagesService.deleteMessage(id);
+  @Delete()
+  remove(@Param('id') id: string) {
+    this.messagesService.remove(id);
   }
 }

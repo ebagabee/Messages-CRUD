@@ -1,57 +1,53 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { MessageType } from './types/message.type';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { randomUUID } from 'crypto';
+import { Injectable } from '@nestjs/common';
+import { MessageEntity } from './entities/message.entity';
 
 @Injectable()
 export class MessagesService {
-  private messages: MessageType[] = [];
+  private lastId = 1;
+  private messages: MessageEntity[] = [
+    {
+      id: 1,
+      text: 'Este é um recado de teste',
+      from: 'Joao',
+      to: 'Gabe',
+      read: false,
+      date: new Date(),
+    },
+  ];
 
-  getAllMessages() {
+  findAll() {
     return this.messages;
   }
 
-  getOneMessage(id: string): MessageType {
-    const messageFind = this.messages.find((message) => message.id === id);
-
-    if (!messageFind) {
-      throw new NotFoundException('Mensagem não encontrada');
-    }
-
-    return messageFind;
+  findOne(id: string) {
+    return this.messages.find((message) => message.id === +id);
   }
 
-  createMessage(data: CreateMessageDto) {
-    const message = { id: randomUUID(), description: data.description };
-
-    if (!data.description) {
-      throw new BadRequestException('Descrição é obrigatoria');
-    }
-
-    this.messages.push(message);
+  create(data: any) {
+    this.lastId++;
+    const id = this.lastId;
+    const newMessage = {
+      id,
+      ...data,
+    };
+    this.messages.push(newMessage);
   }
 
-  updateMessage(id: string, data: CreateMessageDto) {
-    const messageFind = this.messages.find((message) => message.id === id);
+  update(id: string, body: any) {
+    const messageIndex = this.messages.findIndex((item) => item.id === +id);
 
-    if (!messageFind) {
-      throw new NotFoundException('Mensagem não encontrada');
+    if (messageIndex !== -1) {
+      const message = this.messages[messageIndex];
+
+      this.messages[messageIndex] = { ...message, ...body };
     }
-
-    messageFind.description = data.description;
   }
 
-  deleteMessage(id: string) {
-    const messageFind = this.messages.findIndex((message) => message.id === id);
+  remove(id: string) {
+    const messageIndex = this.messages.findIndex((item) => item.id === +id);
 
-    if (messageFind === -1) {
-      throw new NotFoundException('Mensagem não encontrada');
+    if (messageIndex != -1) {
+      this.messages.splice(messageIndex, 1);
     }
-
-    this.messages.splice(messageFind, 1);
   }
 }
