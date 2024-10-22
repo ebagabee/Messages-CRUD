@@ -30,11 +30,11 @@ export class MessagesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: any) {
-    this.messagesService.update(id, body);
+    return this.messagesService.update(id, body);
   }
 
   @Delete()
   remove(@Param('id') id: string) {
-    this.messagesService.remove(id);
+    return this.messagesService.remove(id);
   }
 }
