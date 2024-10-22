@@ -1,3 +1,5 @@
 export class CreateMessageDto {
-  description: string;
+  readonly text: string;
+  readonly from: string;
+  readonly to: string;
 }
