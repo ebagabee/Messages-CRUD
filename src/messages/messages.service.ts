@@ -21,7 +21,7 @@ export class MessagesService {
     return this.messages;
   }
 
-  findOne(id: string) {
+  findOne(id: number) {
     const message = this.messages.find(message => message.id === +id);
 
     if (!message) {
@@ -58,8 +58,8 @@ export class MessagesService {
     return this.messages[messageIndex];
   }
 
-  remove(id: string) {
-    const messageIndex = this.messages.findIndex(item => item.id === +id);
+  remove(id: number) {
+    const messageIndex = this.messages.findIndex(item => item.id === id);
 
     if (messageIndex === -1) {
       throw new NotFoundException("Don't have the message");
